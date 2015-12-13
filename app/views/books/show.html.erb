@@ -1,0 +1,71 @@
+<div class="row">
+
+    <div class="col-md-4">
+
+    <%= image_tag @book.book_img.url(:book_show), class: "book-show" %>
+
+    </div>
+
+    <div class="col-md-8">
+
+      <div class="book-info">
+      <h2 class="book-title"><%= @book.title %></h2>
+      <h3 class="book-author"><span>Autor</span><%= @book.author %></h3>
+      <h2 class="avg-rating">Średnia ocen</h2>
+      <div class="arr" data-score=<%= @average_review %>></div>
+      <span class="number-of-reviews">Bazuje na <%= @book.reviews.count %> recenzjach </span>
+      <p class="book-desc"><%= @book.description %></p>
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-4">
+              <div class="reviews">
+            <!-- Tu se beda raintingi -->
+                <h1>Oceny</h1>
+                <%= render @book.reviews %>
+                <div>
+                     <%= link_to "Dodaj recenzje", new_book_review_path(@book), class: "btn-custom"%>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="links btn-group">
+
+        <%= link_to "Wróć", root_path, class: "btn btn-custom" %>
+
+        <% if user_signed_in? %>
+
+              <% if @book.user_id == current_user.id %>
+
+                  <%= link_to "Edycja", edit_book_path(@book), class: "btn btn-custom" %>
+                  <%= link_to "Usun", book_path(@book), method: :delete, data: { confirm: "Jesteś pewnien?"}, class: "btn btn-custom" %>
+
+              <% end %>
+
+        <% end %>
+
+</div>
+
+<script>
+
+  $('.review-rating').raty({
+      readOnly: true,
+      score: function() {
+        return $(this).attr('data-score');
+      },
+
+      path: '/assets/'
+
+  });
+</script>
+
+<script>
+    $('.arr').raty({
+      readOnly: true,
+      path: '/assets/',
+      score: function() {
+        return $(this).attr('data-score');
+      }
+    });
+</script>
